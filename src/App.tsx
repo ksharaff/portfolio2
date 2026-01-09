@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import SnowFall from 'react-snowfall'
 import profileImage from './assets/profile.jpeg'
+import chessImg from './assets/chess.png'
+import sentimentImg from './assets/sentiment.jpg'
 import Lottie from 'lottie-react'
-import catAnimation from '../public/animations/cat.json'
+import catAnimation from './assets/animations/cat.json'
 
 type SocialName = 'linkedin' | 'github' | 'instagram' | 'mail'
 
@@ -11,7 +13,7 @@ const socials: { label: string; href: string; icon: SocialName }[] = [
   { label: 'LinkedIn', href: 'https://linkedin.com/in/khaled-sharafeddin', icon: 'linkedin' },
   { label: 'GitHub', href: 'https://github.com/ksharaff', icon: 'github' },
   { label: 'Instagram', href: 'https://www.instagram.com/khaledsharaff/', icon: 'instagram' },
-  { label: 'Email', href: 'khaled.sharafeddin@outlook.com', icon: 'mail' },
+  { label: 'Email', href: 'mailto:khaled.sharafeddin@outlook.com', icon: 'mail' },
 ]
 
 const SocialIcon = ({ name }: { name: SocialName }) => {
@@ -50,8 +52,7 @@ const showcases = [
     title: 'C+- Custom Chess Game',
     description:
       'A fully functioning chess game with custom game logic.',
-    image:
-      '/src/assets/chess.png',
+    image: chessImg,
     href: 'https://github.com/kxredo/custom-chess',
     stack: ['Java, Java Swing'],
   },
@@ -59,8 +60,7 @@ const showcases = [
     title: 'Sentiment Analysis',
     description:
       'Machine learning project using PyTorch to analyze Amazon products sentiment with natural language processing techniques',
-    image:
-      '/src/assets/sentiment.jpg',
+    image: sentimentImg,
     href: 'https://github.com/ksharaff/sentiment-analysis',
     stack: ['Python', 'PyTorch', 'ML'],
   }
