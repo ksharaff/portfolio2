@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Roboto Slab', 'Segoe ser', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #e5e7eb;
+  background-color: #0e1115;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg: #0e1115;
+  --panel: #10151c;
+  --muted: #9ca3af;
+  --primary: #e5e7eb;
+  --accent: #003770;
+  --accent-2: #6b7280;
+  --divider: #1f2833;
+}
+
+[data-theme='light'] {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --muted: #4b5563;
+  --primary: #0f172a;
+  --accent: #003770;
+  --accent-2: #94a3b8;
+  --divider: #e5e7eb;
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.04), transparent 25%),
+    var(--bg);
+  color: var(--primary);
+  overflow: hidden;
+}
+
+[data-theme='light'] body {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.02), transparent 32%),
+    linear-gradient(225deg, rgba(0, 0, 0, 0.015), transparent 38%),
+    var(--bg);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
