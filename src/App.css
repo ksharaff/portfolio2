@@ -153,27 +153,13 @@
   scroll-margin-top: 80px;
 }
 
-.left-rail {
-  display: grid;
-  gap: 16px;
-  justify-content: center;
-}
 
-.left-rail span {
-  width: 40px;
-  height: 2px;
-  background: var(--divider);
-}
 
 .intro {
   max-width: 560px;
 }
 
-.eyebrow {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-}
+
 
 .intro h1 {
   margin: 4px 0 16px;
@@ -213,8 +199,8 @@
 
 .resume:hover,
 .resume:focus-visible {
-  background: var(--primary);
-  color: #0c0f13;
+  background: #003771;
+  color: #ffffff;
   border-color: var(--primary);
 }
 
@@ -255,8 +241,8 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(124, 91, 255, 0.8), rgba(124, 91, 255, 0.2));
-  box-shadow: 0 0 20px rgba(124, 91, 255, 0.6), 0 0 40px rgba(124, 91, 255, 0.3);
+  background: radial-gradient(circle, #ffffff, #003771);
+  box-shadow: 0 0 20px rgba(124, 91, 255, 0.6), 0 0 40px #003771;
   pointer-events: none;
   z-index: 50;
   mix-blend-mode: screen;
@@ -495,6 +481,46 @@
 .pill-link::after {
   content: '→';
   font-size: 14px;
+
+/* Mobile-first tweaks */
+@media (hover: none) {
+  /* Hide cursor follower on touch devices */
+  .cursor-follower {
+    display: none;
+  }
+
+  /* Always show tech chips on touch (no hover) */
+  .showcase-card .tech-chips {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  /* Reduce page padding on small screens */
+  .page {
+    padding: 24px 16px 40px;
+  }
+
+  /* Make portrait socials 2 columns for better tapping */
+  .portrait-socials {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* Increase tap targets slightly */
+  .social-chip {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  /* Relax scroll snapping for smaller screens if needed */
+  .hero,
+  .showcases {
+    scroll-snap-stop: always;
+    scroll-margin-top: 70px;
+  }
+}
   opacity: 0.8;
 }
 
@@ -555,9 +581,6 @@
     grid-template-rows: auto auto auto;
   }
 
-  .left-rail {
-    display: none;
-  }
 
   .portrait {
     order: 1;

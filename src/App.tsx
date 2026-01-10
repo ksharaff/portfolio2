@@ -72,6 +72,7 @@ function App() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [isLoading, setIsLoading] = useState(false)
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+  const [snowCount, setSnowCount] = useState(200)
   const containerRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
 
@@ -106,6 +107,19 @@ function App() {
     const id = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(id)
   }, [cursorPos])
+
+  // Adaptive snowfall for mobile and reduced motion
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const updateSnow = () => {
+      const w = window.innerWidth
+      const isSmall = w < 768
+      setSnowCount(prefersReducedMotion ? 0 : isSmall ? 80 : 200)
+    }
+    updateSnow()
+    window.addEventListener('resize', updateSnow)
+    return () => window.removeEventListener('resize', updateSnow)
+  }, [])
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
@@ -201,11 +215,7 @@ function App() {
           <p className="loading-text">Loading project...</p>
         </div>
       )}
-      <SnowFall
-        color="white"
-        
-        snowflakeCount={200}
-      />
+      <SnowFall color="white" snowflakeCount={snowCount} />
       <header className="top-bar">
         <div className="brand">
           <div>Khaled</div>
