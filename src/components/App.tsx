@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import './App.css'
+import '../css/App.css'
 import SnowFall from 'react-snowfall'
-import profileImage from './assets/profile.jpeg'
-import chessImg from './assets/chess.png'
-import sentimentImg from './assets/sentiment.jpg'
-import Lottie from 'lottie-react'
-import catAnimation from './assets/animations/cat.json'
+import profileImage from '../assets/profile.jpeg'
+import { SkillsSection } from './Skills'
+import { ShowcasesSection } from './Showcases'
+
 
 type SocialName = 'linkedin' | 'github' | 'instagram' | 'mail'
 
@@ -47,31 +46,12 @@ const SocialIcon = ({ name }: { name: SocialName }) => {
   }
 }
 
-const showcases = [
-  {
-    title: 'C+- Custom Chess Game',
-    description:
-      'A fully functioning chess game with custom game logic.',
-    image: chessImg,
-    href: 'https://github.com/kxredo/custom-chess',
-    stack: ['Java, Java Swing'],
-  },
-  {
-    title: 'Sentiment Analysis',
-    description:
-      'Machine learning project using PyTorch to analyze Amazon products sentiment with natural language processing techniques',
-    image: sentimentImg,
-    href: 'https://github.com/ksharaff/sentiment-analysis',
-    stack: ['Python', 'PyTorch', 'ML'],
-  }
-]
-
-// Showcase footer removed; no active pagination dots needed
+// Data and components are now in separate files for code-splitting
 
 function App() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-  const [isLoading, setIsLoading] = useState(false)
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+  const [snowCount, setSnowCount] = useState(200)
   const containerRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
 
@@ -106,6 +86,76 @@ function App() {
     const id = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(id)
   }, [cursorPos])
+
+  // Scroll-triggered animations for cards
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in')
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    )
+
+    const cards = document.querySelectorAll('.showcase-card, .skill-card')
+    cards.forEach((card) => observer.observe(card))
+    return () => observer.disconnect()
+  }, [])
+
+  // Hero parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = containerRef.current?.querySelector('.hero')
+      if (!hero) return
+      const scrollY = containerRef.current?.scrollTop || 0
+      const parallaxEl = hero.querySelector('.parallax-bg')
+      if (parallaxEl) {
+        ;(parallaxEl as HTMLElement).style.transform = `translateY(${scrollY * 0.5}px)`
+      }
+    }
+
+    const el = containerRef.current
+    if (el) el.addEventListener('scroll', handleScroll)
+    return () => {
+      if (el) el.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  // Update scroll progress bar
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const handleScroll = () => {
+      const scrollTop = el.scrollTop
+      const scrollHeight = el.scrollHeight - el.clientHeight
+      const scrollPercent = (scrollTop / scrollHeight) * 100
+
+      const progressBar = document.querySelector('.nav-progress')
+      if (progressBar) {
+        ;(progressBar as HTMLElement).style.width = `${scrollPercent}%`
+      }
+    }
+
+    el.addEventListener('scroll', handleScroll)
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Adaptive snowfall for mobile and reduced motion
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const updateSnow = () => {
+      const w = window.innerWidth
+      const isSmall = w < 768
+      setSnowCount(prefersReducedMotion ? 0 : isSmall ? 80 : 200)
+    }
+    updateSnow()
+    window.addEventListener('resize', updateSnow)
+    return () => window.removeEventListener('resize', updateSnow)
+  }, [])
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
@@ -150,9 +200,6 @@ function App() {
     const el = containerRef.current
     if (!el) return
 
-    const sections = Array.from(
-      el.querySelectorAll<HTMLElement>('.snap-section'),
-    )
     let currentIndex = 0
     let animating = false
     let timer: number | undefined
@@ -160,9 +207,13 @@ function App() {
     const clamp = (n: number, min: number, max: number) =>
       Math.max(min, Math.min(max, n))
 
+    const getSections = () =>
+      Array.from(el.querySelectorAll<HTMLElement>('.snap-section'))
+
     const settle = (targetIndex: number) => {
       window.clearTimeout(timer)
       timer = window.setTimeout(() => {
+        const sections = getSections()
         const target = sections[targetIndex]
         if (target) {
           el.scrollTo({ top: target.offsetTop })
@@ -175,6 +226,7 @@ function App() {
     const onWheel = (e: WheelEvent) => {
       // Prevent the default incremental wheel to avoid jitter
       e.preventDefault()
+      const sections = getSections()
       if (animating || sections.length === 0) return
       const dir = Math.sign(e.deltaY)
       if (dir === 0) return
@@ -195,17 +247,7 @@ function App() {
   // Configuration 
   return (
     <div className="page" ref={containerRef}>
-      {isLoading && (
-        <div className="loading-screen">
-          <Lottie animationData={catAnimation} loop={true} />
-          <p className="loading-text">Loading project...</p>
-        </div>
-      )}
-      <SnowFall
-        color="white"
-        
-        snowflakeCount={200}
-      />
+      <SnowFall color="white" snowflakeCount={snowCount} />
       <header className="top-bar">
         <div className="brand">
           <div>Khaled</div>
@@ -215,6 +257,7 @@ function App() {
           <a className="active" href="#profile">
             Profile
           </a>
+          <a href="#skills">Skills</a>
           <a href="#showcases">Showcases</a>
         </nav>
         <button
@@ -225,8 +268,10 @@ function App() {
         >
           <span className="toggle-dot" />
         </button>
+        <div className="nav-progress" aria-hidden />
       </header>
       <main className="snap-section hero" id="profile">
+        <div className="parallax-bg" aria-hidden />
         <div className="left-rail" aria-hidden>
           <span />
           <span />
@@ -282,70 +327,10 @@ function App() {
         </div>
       </main>
 
-      <section className="snap-section showcases" id="showcases">
-        <div className="showcase-container">
-          <div className="showcase-head">
-            <div className="section-title">Showcases.</div>
-            <p className="section-lede">
-              These are some highlight projects. Each page discusses the purpose of the project, what was learned, and how I came up with solutions.
-            </p>
-          </div>
+      {/* Skills section */}
+      <SkillsSection />
 
-          <div className="showcase-carousel">
-            <div className="showcase-grid">
-              {showcases.map((item, index) => (
-                <article className="showcase-card" key={item.title}>
-                  <div className="showcase-media">
-                    <a
-                      className="media-link"
-                      href={item.href}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setIsLoading(true)
-                        setTimeout(() => {
-                          window.open(item.href, '_blank')
-                          setIsLoading(false)
-                        }, 2000)
-                      }}
-                      aria-label={`Open ${item.title}`}
-                    >
-                      <img src={item.image} alt={item.title} />
-                      {index === showcases.length - 1 && (
-                        <div className="nav-arrow">›</div>
-                      )}
-                    </a>
-                    <div className="tech-chips" aria-label="Tech stack">
-                      {item.stack.map((tech) => (
-                        <span key={tech}>{tech}</span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="showcase-body">
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                    <a
-                      className="pill-link"
-                      href={item.href}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setIsLoading(true)
-                        setTimeout(() => {
-                          window.open(item.href, '_blank')
-                          setIsLoading(false)
-                        }, 2000)
-                      }}
-                    >
-                      VIEW PROJECT
-                    </a>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer dots and label removed */}
-        </div>
-      </section>
+      <ShowcasesSection />
 
       {/* Contact section removed as requested */}
     </div>
