@@ -206,6 +206,7 @@
   overflow: hidden;
 }
 
+<<<<<<< HEAD:src/css/App.css
 .parallax-bg {
   position: absolute;
   inset: 0;
@@ -214,6 +215,9 @@
 }
 
 
+=======
+
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 
 .intro {
   max-width: 560px;
@@ -296,6 +300,20 @@
   z-index: -1;
 }
 
+<<<<<<< HEAD:src/css/App.css
+=======
+.cursor-follower {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff, #003771);
+  box-shadow: 0 0 20px rgba(124, 91, 255, 0.6), 0 0 40px #003771;
+  pointer-events: none;
+  z-index: 50;
+  mix-blend-mode: screen;
+}
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 
 .portrait-socials {
   margin-top: 14px;
@@ -556,6 +574,7 @@
 @media (max-width: 720px) {
   /* Reduce page padding on small screens */
   .page {
+<<<<<<< HEAD:src/css/App.css
     padding: 20px 12px 32px;
     height: 100vh;
   }
@@ -791,6 +810,31 @@
     gap: 6px;
     margin-top: 8px;
   }
+=======
+    padding: 24px 16px 40px;
+  }
+
+  /* Make portrait socials 2 columns for better tapping */
+  .portrait-socials {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* Increase tap targets slightly */
+  .social-chip {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  /* Relax scroll snapping for smaller screens if needed */
+  .hero,
+  .showcases {
+    scroll-snap-stop: always;
+    scroll-margin-top: 70px;
+  }
+}
+  opacity: 0.8;
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 }
 
 /* Showcase footer removed */
@@ -833,10 +877,46 @@
     max-width: 740px;
   }
 
+<<<<<<< HEAD:src/css/App.css
   .skills-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 740px;
     margin: 0 auto;
+=======
+@media (max-width: 720px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+
+  .portrait {
+    order: 1;
+    justify-self: stretch;
+  }
+
+  .intro {
+    order: 2;
+  }
+
+  .showcase-grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+
+  .showcase-card {
+    min-height: 0;
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
   }
 }
 

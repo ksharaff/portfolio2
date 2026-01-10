@@ -87,6 +87,7 @@ function App() {
     return () => cancelAnimationFrame(id)
   }, [cursorPos])
 
+<<<<<<< HEAD:src/components/App.tsx
   // Scroll-triggered animations for cards
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -144,6 +145,8 @@ function App() {
     return () => el.removeEventListener('scroll', handleScroll)
   }, [])
 
+=======
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.tsx
   // Adaptive snowfall for mobile and reduced motion
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -247,6 +250,15 @@ function App() {
   // Configuration 
   return (
     <div className="page" ref={containerRef}>
+<<<<<<< HEAD:src/components/App.tsx
+=======
+      {isLoading && (
+        <div className="loading-screen">
+          <Lottie animationData={catAnimation} loop={true} />
+          <p className="loading-text">Loading project...</p>
+        </div>
+      )}
+>>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.tsx
       <SnowFall color="white" snowflakeCount={snowCount} />
       <header className="top-bar">
         <div className="brand">
