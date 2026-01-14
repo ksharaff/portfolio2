@@ -59,53 +59,51 @@ function App() {
     document.documentElement.dataset.theme = theme
   }, [theme])
 
-  // Cursor follower effect
+  // Cursor follower effect - only on desktop, disabled during scroll
   useEffect(() => {
+    const isTouchDevice = () => window.matchMedia('(hover: none)').matches
+    
     const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY })
+      if (!isTouchDevice() && cursorRef.current) {
+        setCursorPos({ x: e.clientX, y: e.clientY })
+      }
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    if (!isTouchDevice()) {
+      window.addEventListener('mousemove', handleMouseMove, { passive: true })
+      return () => window.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
 
+  // Smooth cursor animation but only on mouse move, not continuous
   useEffect(() => {
     if (!cursorRef.current) return
     const cursor = cursorRef.current
     let x = cursorPos.x
     let y = cursorPos.y
+    let rafId: number | null = null
 
     const animate = () => {
       x += (cursorPos.x - x) * 0.2
       y += (cursorPos.y - y) * 0.2
       cursor.style.left = x - 12 + 'px'
       cursor.style.top = y - 12 + 'px'
-      requestAnimationFrame(animate)
+      
+      // Stop animation when close enough to target
+      if (Math.abs(cursorPos.x - x) > 0.5 || Math.abs(cursorPos.y - y) > 0.5) {
+        rafId = requestAnimationFrame(animate)
+      } else {
+        rafId = null
+      }
     }
 
-    const id = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(id)
+    animate()
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [cursorPos])
 
-  // Scroll-triggered animations for cards
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in')
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    )
-
-    const cards = document.querySelectorAll('.showcase-card, .skill-card')
-    cards.forEach((card) => observer.observe(card))
-    return () => observer.disconnect()
-  }, [])
-
-  // Hero parallax effect
+  // Consolidated scroll handler - parallax disabled, progress bar only
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -113,22 +111,13 @@ function App() {
     let rafId: number | null = null
 
     const handleScroll = () => {
-      if (rafId) return // Skip if RAF already scheduled
+      if (rafId) return
       
       rafId = requestAnimationFrame(() => {
         const scrollY = el.scrollTop
         const scrollHeight = el.scrollHeight - el.clientHeight
         
-        // Update parallax
-        const hero = el.querySelector('.hero')
-        if (hero) {
-          const parallaxEl = hero.querySelector('.parallax-bg')
-          if (parallaxEl) {
-            ;(parallaxEl as HTMLElement).style.transform = `translateY(${scrollY * 0.5}px)`
-          }
-        }
-        
-        // Update progress bar
+        // Update progress bar only
         const scrollPercent = (scrollY / scrollHeight) * 100
         const progressBar = document.querySelector('.nav-progress')
         if (progressBar) {
@@ -145,23 +134,6 @@ function App() {
       if (rafId) cancelAnimationFrame(rafId)
     }
   }, [])
-
-  // Adaptive snowfall for mobile and reduced motion
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const updateSnow = () => {
-      const w = window.innerWidth
-      const isSmall = w < 768
-      setSnowCount(prefersReducedMotion ? 0 : isSmall ? 80 : 200)
-    }
-    updateSnow()
-    window.addEventListener('resize', updateSnow)
-    return () => window.removeEventListener('resize', updateSnow)
-  }, [])
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
-  }
 
   // Track active section on scroll
   useEffect(() => {
@@ -206,9 +178,40 @@ function App() {
     }
   }, [])
 
-  // Removed custom wheel handler - native scroll-snap works better
+  // Scroll-triggered animations for cards (via Intersection Observer - no scroll listener)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in')
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    )
 
-  // Configuration 
+    const cards = document.querySelectorAll('.showcase-card, .skill-card')
+    cards.forEach((card) => observer.observe(card))
+    return () => observer.disconnect()
+  }, [])
+
+  // Adaptive snowfall for mobile and reduced motion
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const updateSnow = () => {
+      const w = window.innerWidth
+      const isSmall = w < 768
+      setSnowCount(prefersReducedMotion ? 0 : isSmall ? 50 : 100)
+    }
+    updateSnow()
+    window.addEventListener('resize', updateSnow)
+    return () => window.removeEventListener('resize', updateSnow)
+  }, [])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
   return (
     <div className="page" ref={containerRef}>
       <SnowFall color="white" snowflakeCount={snowCount} />
