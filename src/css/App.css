@@ -206,18 +206,15 @@
   overflow: hidden;
 }
 
-<<<<<<< HEAD:src/css/App.css
 .parallax-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  will-change: transform;
 }
 
 
-=======
-
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 
 .intro {
   max-width: 560px;
@@ -300,20 +297,6 @@
   z-index: -1;
 }
 
-<<<<<<< HEAD:src/css/App.css
-=======
-.cursor-follower {
-  position: fixed;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffffff, #003771);
-  box-shadow: 0 0 20px rgba(124, 91, 255, 0.6), 0 0 40px #003771;
-  pointer-events: none;
-  z-index: 50;
-  mix-blend-mode: screen;
-}
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 
 .portrait-socials {
   margin-top: 14px;
@@ -390,7 +373,7 @@
 
 .showcases {
   margin-top: 400px;
-  padding: 50px 50px;
+  padding: 80px 50px;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -447,6 +430,7 @@
   transition: all 280ms ease;
   opacity: 0;
   animation: fadeInSlide 600ms ease forwards;
+  will-change: transform, opacity, box-shadow;
 }
 
 .showcase-card.animate-in {
@@ -574,243 +558,6 @@
 @media (max-width: 720px) {
   /* Reduce page padding on small screens */
   .page {
-<<<<<<< HEAD:src/css/App.css
-    padding: 20px 12px 32px;
-    height: 100vh;
-  }
-
-  .top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 8px 0;
-    margin-bottom: 8px;
-  }
-
-  .brand {
-    font-size: 18px;
-  }
-
-  .nav {
-    flex-wrap: wrap;
-    gap: 12px;
-    font-weight: 500;
-    font-size: 13px;
-  }
-
-  .nav a {
-    padding-bottom: 4px;
-  }
-
-  .theme-toggle {
-    width: 44px;
-    height: 24px;
-  }
-
-  .toggle-dot {
-    width: 14px;
-    height: 14px;
-  }
-
-  /* Hero section mobile layout */
-  .hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-    gap: 20px;
-    padding: 20px 0 16px;
-    min-height: auto;
-  }
-
-  .left-rail {
-    display: none;
-  }
-
-  .intro {
-    order: 2;
-    max-width: 100%;
-  }
-
-  .intro h1 {
-    font-size: clamp(24px, 6vw, 32px);
-    margin: 8px 0 12px;
-  }
-
-  .intro .eyebrow {
-    font-size: 14px;
-  }
-
-  .body-text {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 0 10px;
-  }
-
-  .resume {
-    padding: 10px 16px;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-
-  .portrait {
-    order: 1;
-    width: min(280px, 100%);
-    aspect-ratio: 1;
-    justify-self: center;
-  }
-
-  .photo-frame {
-    padding: 6px;
-  }
-
-  /* Portrait socials mobile */
-  .portrait-socials {
-    margin-top: 12px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .social-chip {
-    padding: 12px;
-    border-radius: 14px;
-    font-size: 11px;
-  }
-
-  .scroll-cue {
-    display: none;
-  }
-
-  /* Skills section mobile */
-  .skills {
-    margin-top: 32px;
-    padding: 24px 0;
-  }
-
-  .skills-container {
-    max-width: 100%;
-  }
-
-  .skills-head {
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-size: 26px;
-  }
-
-  .section-lede {
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .skills-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .skill-card {
-    min-height: auto;
-  }
-
-  .skill-body {
-    gap: 10px;
-    padding: 14px 14px 16px;
-  }
-
-  .skill-body h3 {
-    font-size: 18px;
-    margin-bottom: 4px;
-  }
-
-  .skill-body p {
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 8px;
-  }
-
-  .skill-chips {
-    margin-top: 2px;
-    gap: 6px;
-  }
-
-  .skill-chips span {
-    padding: 5px 8px;
-    font-size: 11px;
-  }
-
-  /* Showcases section mobile */
-  .showcases {
-    margin-top: 32px;
-    padding: 24px 0;
-    scroll-margin-top: 60px;
-  }
-
-  .showcase-container {
-    max-width: 100%;
-  }
-
-  .showcase-head {
-    margin-bottom: 20px;
-  }
-
-  .showcase-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    max-width: 100%;
-  }
-
-  .showcase-card {
-    min-height: auto;
-  }
-
-  .showcase-media {
-    aspect-ratio: 16 / 10;
-  }
-
-  .showcase-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .nav-arrow {
-    width: 28px;
-    height: 28px;
-    font-size: 18px;
-  }
-
-  .tech-chips {
-    left: 10px;
-    bottom: 10px;
-    gap: 4px;
-  }
-
-  .tech-chips span {
-    padding: 5px 8px;
-    font-size: 10px;
-  }
-
-  .showcase-body {
-    gap: 10px;
-    padding: 14px 14px 16px;
-  }
-
-  .showcase-body h3 {
-    font-size: 18px;
-    margin-bottom: 4px;
-  }
-
-  .showcase-body p {
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .pill-link {
-    font-size: 12px;
-    gap: 6px;
-    margin-top: 8px;
-  }
-=======
     padding: 24px 16px 40px;
   }
 
@@ -834,7 +581,6 @@
   }
 }
   opacity: 0.8;
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
 }
 
 /* Showcase footer removed */
@@ -876,13 +622,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 740px;
   }
+}
 
-<<<<<<< HEAD:src/css/App.css
-  .skills-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 740px;
-    margin: 0 auto;
-=======
 @media (max-width: 720px) {
   .top-bar {
     flex-direction: column;
@@ -916,14 +657,13 @@
 
   .showcase-card {
     min-height: 0;
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.css
   }
 }
 
 /* Skills section */
 .skills {
   margin-top: 400px;
-  padding: 50px 50px;
+  padding: 80px 50px;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -966,6 +706,7 @@
   transition: all 280ms ease;
   opacity: 0;
   animation: fadeInSlide 600ms ease forwards;
+  will-change: transform, opacity, box-shadow;
 }
 
 .skill-card.animate-in {
@@ -1033,3 +774,27 @@
   color: var(--muted);
   font-size: 16px;
   margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 740px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .skills {
+    scroll-snap-stop: always;
+    scroll-margin-top: 70px;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .skill-card {
+    min-height: 0;
+  }
+}

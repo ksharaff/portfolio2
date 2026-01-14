@@ -87,7 +87,6 @@ function App() {
     return () => cancelAnimationFrame(id)
   }, [cursorPos])
 
-<<<<<<< HEAD:src/components/App.tsx
   // Scroll-triggered animations for cards
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -108,45 +107,45 @@ function App() {
 
   // Hero parallax effect
   useEffect(() => {
-    const handleScroll = () => {
-      const hero = containerRef.current?.querySelector('.hero')
-      if (!hero) return
-      const scrollY = containerRef.current?.scrollTop || 0
-      const parallaxEl = hero.querySelector('.parallax-bg')
-      if (parallaxEl) {
-        ;(parallaxEl as HTMLElement).style.transform = `translateY(${scrollY * 0.5}px)`
-      }
-    }
-
-    const el = containerRef.current
-    if (el) el.addEventListener('scroll', handleScroll)
-    return () => {
-      if (el) el.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
-  // Update scroll progress bar
-  useEffect(() => {
     const el = containerRef.current
     if (!el) return
+    
+    let rafId: number | null = null
 
     const handleScroll = () => {
-      const scrollTop = el.scrollTop
-      const scrollHeight = el.scrollHeight - el.clientHeight
-      const scrollPercent = (scrollTop / scrollHeight) * 100
-
-      const progressBar = document.querySelector('.nav-progress')
-      if (progressBar) {
-        ;(progressBar as HTMLElement).style.width = `${scrollPercent}%`
-      }
+      if (rafId) return // Skip if RAF already scheduled
+      
+      rafId = requestAnimationFrame(() => {
+        const scrollY = el.scrollTop
+        const scrollHeight = el.scrollHeight - el.clientHeight
+        
+        // Update parallax
+        const hero = el.querySelector('.hero')
+        if (hero) {
+          const parallaxEl = hero.querySelector('.parallax-bg')
+          if (parallaxEl) {
+            ;(parallaxEl as HTMLElement).style.transform = `translateY(${scrollY * 0.5}px)`
+          }
+        }
+        
+        // Update progress bar
+        const scrollPercent = (scrollY / scrollHeight) * 100
+        const progressBar = document.querySelector('.nav-progress')
+        if (progressBar) {
+          ;(progressBar as HTMLElement).style.width = `${scrollPercent}%`
+        }
+        
+        rafId = null
+      })
     }
 
-    el.addEventListener('scroll', handleScroll)
-    return () => el.removeEventListener('scroll', handleScroll)
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      el.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [])
 
-=======
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.tsx
   // Adaptive snowfall for mobile and reduced motion
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -169,96 +168,49 @@ function App() {
     const el = containerRef.current
     if (!el) return
 
+    let rafId: number | null = null
+
     const handleScroll = () => {
-      const sections = Array.from(
-        el.querySelectorAll<HTMLElement>('.snap-section[id]'),
-      )
+      if (rafId) return
       
-      let current = 'profile'
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect()
-        if (rect.top <= window.innerHeight / 2) {
-          current = section.id
-        }
-      })
-      
-      // Update active nav links
-      const navLinks = el.querySelectorAll('.nav a')
-      navLinks.forEach((link) => {
-        link.classList.remove('active')
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('active')
-        }
+      rafId = requestAnimationFrame(() => {
+        const sections = Array.from(
+          el.querySelectorAll<HTMLElement>('.snap-section[id]'),
+        )
+        
+        let current = 'profile'
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect()
+          if (rect.top <= window.innerHeight / 2) {
+            current = section.id
+          }
+        })
+        
+        // Update active nav links
+        const navLinks = el.querySelectorAll('.nav a')
+        navLinks.forEach((link) => {
+          link.classList.remove('active')
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active')
+          }
+        })
+        
+        rafId = null
       })
     }
 
-    el.addEventListener('scroll', handleScroll)
+    el.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       el.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
     }
   }, [])
 
-  // Smooth, section-per-scroll behavior for mouse wheels
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-
-    let currentIndex = 0
-    let animating = false
-    let timer: number | undefined
-
-    const clamp = (n: number, min: number, max: number) =>
-      Math.max(min, Math.min(max, n))
-
-    const getSections = () =>
-      Array.from(el.querySelectorAll<HTMLElement>('.snap-section'))
-
-    const settle = (targetIndex: number) => {
-      window.clearTimeout(timer)
-      timer = window.setTimeout(() => {
-        const sections = getSections()
-        const target = sections[targetIndex]
-        if (target) {
-          el.scrollTo({ top: target.offsetTop })
-        }
-        currentIndex = targetIndex
-        animating = false
-      }, 600)
-    }
-
-    const onWheel = (e: WheelEvent) => {
-      // Prevent the default incremental wheel to avoid jitter
-      e.preventDefault()
-      const sections = getSections()
-      if (animating || sections.length === 0) return
-      const dir = Math.sign(e.deltaY)
-      if (dir === 0) return
-      const targetIndex = clamp(currentIndex + dir, 0, sections.length - 1)
-      if (targetIndex === currentIndex) return
-      animating = true
-      sections[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
-      settle(targetIndex)
-    }
-
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => {
-      el.removeEventListener('wheel', onWheel as EventListener)
-      window.clearTimeout(timer)
-    }
-  }, [])
+  // Removed custom wheel handler - native scroll-snap works better
 
   // Configuration 
   return (
     <div className="page" ref={containerRef}>
-<<<<<<< HEAD:src/components/App.tsx
-=======
-      {isLoading && (
-        <div className="loading-screen">
-          <Lottie animationData={catAnimation} loop={true} />
-          <p className="loading-text">Loading project...</p>
-        </div>
-      )}
->>>>>>> 3b0c93276140fa3d284854b513c1be9a6cbed448:src/App.tsx
       <SnowFall color="white" snowflakeCount={snowCount} />
       <header className="top-bar">
         <div className="brand">
@@ -270,7 +222,7 @@ function App() {
             Profile
           </a>
           <a href="#skills">Skills</a>
-          <a href="#showcases">Showcases</a>
+          <a href="#showcases">Projects</a>
         </nav>
         <button
           className="theme-toggle"

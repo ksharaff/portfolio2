@@ -1,5 +1,6 @@
 import chessImg from '../assets/chess.png'
 import sentimentImg from '../assets/sentiment.jpg'
+import automataImg from '../assets/automata.jpg'
 
 const showcases = [
   {
@@ -13,10 +14,18 @@ const showcases = [
   {
     title: 'Sentiment Analysis',
     description:
-      'Machine learning project using PyTorch to analyze Amazon products sentiment with natural language processing techniques',
+      'Machine learning project using PyTorch to analyze Amazon products sentiment with NLP techniques',
     image: sentimentImg,
     href: 'https://github.com/ksharaff/sentiment-analysis',
-    stack: ['Python', 'PyTorch', 'ML'],
+    stack: ['Python', 'PyTorch', 'ML', 'NLP'],
+  },
+  {
+    title: 'Automata Theory Program',
+    description:
+      'Contributed in enhancing the Automata Thoery program.',
+    image: automataImg,
+    href: 'https://github.com/ksharaff/Automata_Practice_and_Test',
+    stack: ['Java', 'Swing'],
   }
 ]
 
@@ -25,10 +34,7 @@ export function ShowcasesSection() {
     <section className="snap-section showcases" id="showcases">
       <div className="showcase-container">
         <div className="showcase-head">
-          <div className="section-title">Showcases.</div>
-          <p className="section-lede">
-            These are some highlight projects. Each page discusses the purpose of the project, what was learned, and how I came up with solutions.
-          </p>
+          <div className="section-title">Projects</div>
         </div>
 
         <div className="showcase-carousel">

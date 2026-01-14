@@ -38,10 +38,8 @@ export function SkillsSection() {
     <section className="snap-section skills" id="skills">
       <div className="skills-container">
         <div className="skills-head">
-          <div className="section-title">Skills.</div>
-          <p className="section-lede">
-            A snapshot of my core capabilities and the technologies I use regularly.
-          </p>
+          <div className="section-title">Skills</div>
+          
         </div>
         <div className="skills-grid">
           {skills.map((item) => (
